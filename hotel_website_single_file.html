@@ -1,0 +1,448 @@
+<!--
+Project: Hotel Website - Single-file template
+Filename: Hotel_website_single_file.html
+
+How to use:
+1. Copy this file into Visual Studio Code and save as Hotel_website_single_file.html
+2. Open with Live Server or a browser to preview.
+3. To push to GitHub:
+   git init
+   git add Hotel_website_single_file.html
+   git commit -m "Initial hotel website single-file"
+   git branch -M main
+   git remote add origin <your-github-repo-url>
+   git push -u origin main
+
+Notes:
+- This is a static single-file template (HTML + CSS + JS). It simulates reservations locally using localStorage.
+- Replace placeholder images (pics) with your own, and update payment/booking back-end later for real bookings.
+- To split into multiple files: separate CSS into styles.css and JS into app.js; update links accordingly.
+- If you want an actual booking engine, I can provide a Node.js or PHP backend and database schema.
+-->
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hotel Paraíso — Página Oficial</title>
+  <meta name="description" content="Hotel Paraíso - comodidad, cercanía y excelente servicio. Reserva ahora.">
+
+  <!-- Bootstrap 5 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Custom styles */
+    :root{--brand:#0d6efd;--muted:#6c757d}
+    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
+    .hero{background-image:linear-gradient(0deg, rgba(0,0,0,0.45), rgba(0,0,0,0.15)), url('https://picsum.photos/1600/900?hotel'); background-size:cover; background-position:center; color:white; min-height:60vh; display:flex; align-items:center}
+    .room-card img{height:180px; object-fit:cover}
+    .gallery img{height:200px; object-fit:cover; width:100%}
+    .badge-service{background:linear-gradient(90deg,#0d6efd66,#6610f266); color:white}
+    footer{background:#f8f9fa}
+    @media (max-width:576px){ .hero{min-height:45vh} }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#">Hotel Paraíso</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="#rooms">Habitaciones</a></li>
+        <li class="nav-item"><a class="nav-link" href="#services">Servicios</a></li>
+        <li class="nav-item"><a class="nav-link" href="#gallery">Galería</a></li>
+        <li class="nav-item"><a class="nav-link" href="#reservations">Reservas</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contact">Contacto</a></li>
+      </ul>
+      <a class="btn btn-primary ms-lg-3" href="#reservations">Reserva Ahora</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero text-white">
+  <div class="container text-center">
+    <h1 class="display-5 fw-bold">Descansa, Explora y Repite</h1>
+    <p class="lead">Bienvenido a Hotel Paraíso — comodidad 5 estrellas cerca de los mejores atractivos.</p>
+    <a href="#reservations" class="btn btn-lg btn-light text-primary">Reservar ahora</a>
+  </div>
+</header>
+
+<!-- INTRO + FEATURES -->
+<section class="py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h2>Tu estancia, pensada al detalle</h2>
+        <p class="text-muted">Habitaciones modernas, restaurante de autor, piscina, gimnasio y servicio de traslado. Nuestro personal está listo para hacerte sentir como en casa.</p>
+        <ul class="list-unstyled">
+          <li>• Wi‑Fi gratuito en todas las áreas</li>
+          <li>• Desayuno buffet incluido (según tarifa)</li>
+          <li>• Servicio 24 horas en recepción</li>
+        </ul>
+      </div>
+      <div class="col-md-6 text-center">
+        <img src="https://picsum.photos/600/400?interior" alt="hotel" class="img-fluid rounded shadow-sm">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROOMS -->
+<section id="rooms" class="py-5 bg-light">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3>Habitaciones y Tarifas</h3>
+      <small class="text-muted">Precios desde S/120 por noche</small>
+    </div>
+
+    <div class="row g-3">
+      <!-- Room 1 -->
+      <div class="col-md-4">
+        <div class="card room-card">
+          <img src="https://picsum.photos/seed/room1/600/400" class="card-img-top" alt="Habitación Simple">
+          <div class="card-body">
+            <h5 class="card-title">Habitación Simple</h5>
+            <p class="card-text text-muted">Cama individual, baño privado, vista a la ciudad.</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="fw-bold">S/120 <small class="text-muted">/noche</small></span>
+              <button class="btn btn-outline-primary btn-sm" onclick="openBooking('Habitación Simple',120)">Reservar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Room 2 -->
+      <div class="col-md-4">
+        <div class="card room-card">
+          <img src="https://picsum.photos/seed/room2/600/400" class="card-img-top" alt="Habitación Doble">
+          <div class="card-body">
+            <h5 class="card-title">Habitación Doble</h5>
+            <p class="card-text text-muted">Cama matrimonial o dos camas, ideal para parejas o amigos.</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="fw-bold">S/200 <small class="text-muted">/noche</small></span>
+              <button class="btn btn-outline-primary btn-sm" onclick="openBooking('Habitación Doble',200)">Reservar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Room 3 -->
+      <div class="col-md-4">
+        <div class="card room-card">
+          <img src="https://picsum.photos/seed/room3/600/400" class="card-img-top" alt="Suite">
+          <div class="card-body">
+            <h5 class="card-title">Suite Deluxe</h5>
+            <p class="card-text text-muted">Habitación amplia, sala privada, vista panorámica.</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="fw-bold">S/420 <small class="text-muted">/noche</small></span>
+              <button class="btn btn-outline-primary btn-sm" onclick="openBooking('Suite Deluxe',420)">Reservar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="py-5">
+  <div class="container">
+    <h3>Servicios</h3>
+    <div class="row g-3 mt-3">
+      <div class="col-md-3">
+        <div class="p-3 border rounded text-center">
+          <div class="mb-2"><span class="badge badge-service p-2 rounded">Desayuno</span></div>
+          <small class="d-block text-muted">Buffet / a la carta</small>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="p-3 border rounded text-center">
+          <div class="mb-2"><span class="badge badge-service p-2 rounded">Piscina</span></div>
+          <small class="d-block text-muted">Alberca exterior</small>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="p-3 border rounded text-center">
+          <div class="mb-2"><span class="badge badge-service p-2 rounded">Traslado</span></div>
+          <small class="d-block text-muted">Aeropuerto y tours</small>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="p-3 border rounded text-center">
+          <div class="mb-2"><span class="badge badge-service p-2 rounded">Spa</span></div>
+          <small class="d-block text-muted">Masajes y relajación</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" class="py-5 bg-light">
+  <div class="container">
+    <h3>Galería</h3>
+    <div class="row g-3 mt-3 gallery">
+      <div class="col-md-4"><img src="https://picsum.photos/seed/g1/800/600" class="rounded shadow-sm" alt=""></div>
+      <div class="col-md-4"><img src="https://picsum.photos/seed/g2/800/600" class="rounded shadow-sm" alt=""></div>
+      <div class="col-md-4"><img src="https://picsum.photos/seed/g3/800/600" class="rounded shadow-sm" alt=""></div>
+      <div class="col-md-4"><img src="https://picsum.photos/seed/g4/800/600" class="rounded shadow-sm" alt=""></div>
+      <div class="col-md-4"><img src="https://picsum.photos/seed/g5/800/600" class="rounded shadow-sm" alt=""></div>
+      <div class="col-md-4"><img src="https://picsum.photos/seed/g6/800/600" class="rounded shadow-sm" alt=""></div>
+    </div>
+  </div>
+</section>
+
+<!-- RESERVATIONS -->
+<section id="reservations" class="py-5">
+  <div class="container">
+    <h3>Reservas</h3>
+    <div class="row mt-3">
+      <div class="col-lg-6">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Busca disponibilidad</h5>
+            <form id="searchForm" onsubmit="return false">
+              <div class="mb-3">
+                <label class="form-label">Fecha de entrada</label>
+                <input type="date" id="checkin" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Fecha de salida</label>
+                <input type="date" id="checkout" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Huéspedes</label>
+                <select id="guests" class="form-select">
+                  <option value="1">1</option>
+                  <option value="2" selected>2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-primary" onclick="searchAvailability()">Buscar</button>
+                <button class="btn btn-outline-secondary" onclick="clearSearch()">Limpiar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div id="searchResult" class="mt-3"></div>
+      </div>
+
+      <div class="col-lg-6">
+        <h6>Reserva rápida</h6>
+        <p class="text-muted">Selecciona una habitación desde la sección de habitaciones o haz una reserva manual aquí.</p>
+        <div class="card p-3">
+          <form id="bookingForm" onsubmit="handleBooking(event)">
+            <div class="mb-2">
+              <label class="form-label">Habitación</label>
+              <input type="text" id="roomType" class="form-control" placeholder="Ej: Habitación Doble" required>
+            </div>
+            <div class="mb-2 row g-2">
+              <div class="col-6"><input type="date" id="bCheckin" class="form-control" required></div>
+              <div class="col-6"><input type="date" id="bCheckout" class="form-control" required></div>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Nombre</label>
+              <input type="text" id="guestName" class="form-control" required>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Correo</label>
+              <input type="email" id="guestEmail" class="form-control">
+            </div>
+            <div class="mb-2 d-flex justify-content-between align-items-center">
+              <div>
+                <label class="form-label">Precio por noche (S/)</label>
+                <input type="number" id="pricePerNight" class="form-control" value="120" required>
+              </div>
+              <div class="align-self-end">
+                <button class="btn btn-success mt-2">Confirmar reserva</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div id="bookingList" class="mt-3"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-5 bg-light">
+  <div class="container">
+    <h3>Contacto y Ubicación</h3>
+    <div class="row mt-3">
+      <div class="col-md-6">
+        <p>Dirección: Av. Ejemplo 123, Ciudad, País</p>
+        <p>Teléfono: +51 123 456 789</p>
+        <p>WhatsApp: +51 987 654 321</p>
+        <p>Email: <a href="mailto:reservas@hotelparaiso.example">reservas@hotelparaiso.example</a></p>
+
+        <form onsubmit="return false" class="mt-3">
+          <div class="mb-2"><input class="form-control" placeholder="Tu nombre" required></div>
+          <div class="mb-2"><input class="form-control" placeholder="Tu email" required></div>
+          <div class="mb-2"><textarea class="form-control" rows="3" placeholder="Mensaje"></textarea></div>
+          <button class="btn btn-primary">Enviar mensaje</button>
+        </form>
+      </div>
+      <div class="col-md-6">
+        <!-- Replace src with your Google Maps embed link -->
+        <iframe src="https://maps.google.com/maps?q=Lima&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS + FOOTER -->
+<section class="py-5">
+  <div class="container">
+    <h3>Opiniones</h3>
+    <div class="row mt-3">
+      <div class="col-md-4">
+        <div class="p-3 border rounded">"Excelente estadía, personal amable."<br><small class="text-muted">— Ana P.</small></div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-3 border rounded">"La comida fue deliciosa."<br><small class="text-muted">— Carlos G.</small></div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-3 border rounded">"Limpio y céntrico."<br><small class="text-muted">— María L.</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="py-4">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div>© <span id="year"></span> Hotel Paraíso. Todos los derechos reservados.</div>
+    <div>
+      <a href="#" class="me-3">Política de privacidad</a>
+      <a href="#">Términos</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Booking Modal (hidden, used by JS) -->
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Reservar</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="modalBookingForm" onsubmit="handleBooking(event)">
+          <div class="mb-2"><label class="form-label">Habitación</label><input type="text" id="mRoomType" class="form-control" readonly></div>
+          <div class="mb-2 row g-2"><div class="col-6"><input type="date" id="mCheckin" class="form-control" required></div><div class="col-6"><input type="date" id="mCheckout" class="form-control" required></div></div>
+          <div class="mb-2"><input type="text" id="mName" class="form-control" placeholder="Tu nombre" required></div>
+          <div class="mb-2"><input type="email" id="mEmail" class="form-control" placeholder="Correo (opcional)"></div>
+          <div class="mb-2"><input type="number" id="mPrice" class="form-control" readonly></div>
+          <div class="text-end"><button class="btn btn-success">Confirmar</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Small helper utilities + simple localStorage booking engine (demo)
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+
+  function openBooking(room, price){
+    document.getElementById('mRoomType').value = room;
+    document.getElementById('mPrice').value = price;
+    bookingModal.show();
+  }
+
+  function handleBooking(e){
+    e.preventDefault();
+    const room = document.getElementById('mRoomType').value || document.getElementById('roomType').value;
+    const checkin = document.getElementById('mCheckin').value || document.getElementById('bCheckin').value;
+    const checkout = document.getElementById('mCheckout').value || document.getElementById('bCheckout').value;
+    const name = document.getElementById('mName').value || document.getElementById('guestName').value;
+    const email = document.getElementById('mEmail').value || document.getElementById('guestEmail').value;
+    const price = Number(document.getElementById('mPrice').value || document.getElementById('pricePerNight').value || 0);
+
+    if(!room || !checkin || !checkout || !name) return alert('Por favor completa los campos obligatorios');
+
+    const nights = calcNights(checkin, checkout);
+    if(nights <= 0) return alert('Fechas inválidas: la fecha de salida debe ser posterior a la de entrada');
+
+    const total = nights * price;
+
+    const booking = {id: 'B' + Date.now(), room, checkin, checkout, name, email, price, nights, total };
+    const list = JSON.parse(localStorage.getItem('hotelBookings') || '[]');
+    list.push(booking);
+    localStorage.setItem('hotelBookings', JSON.stringify(list));
+
+    bookingModal.hide();
+    renderBookings();
+    alert('Reserva confirmada (simulada). Total: S/' + total);
+  }
+
+  function calcNights(a,b){
+    const d1 = new Date(a); const d2 = new Date(b);
+    const diff = (d2 - d1) / (1000*60*60*24);
+    return Math.max(0, Math.floor(diff));
+  }
+
+  function renderBookings(){
+    const list = JSON.parse(localStorage.getItem('hotelBookings') || '[]');
+    const container = document.getElementById('bookingList');
+    if(list.length === 0) { container.innerHTML = '<div class="text-muted">No hay reservas.</div>'; return; }
+    let html = '<div class="list-group">';
+    list.slice().reverse().forEach(b=>{
+      html += `<div class="list-group-item">
+                <div class=\"d-flex justify-content-between\"><div><strong>${b.room}</strong> — ${b.name}<br><small class=\"text-muted\">${b.checkin} → ${b.checkout} (${b.nights} noches)</small></div><div class=\"text-end\">S/${b.total.toFixed(2)}<br><button class=\"btn btn-sm btn-outline-danger mt-2\" onclick=\"cancelBooking('${b.id}')\">Cancelar</button></div></div>
+              </div>`;
+    });
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
+  function cancelBooking(id){
+    if(!confirm('¿Cancelar reserva?')) return;
+    let list = JSON.parse(localStorage.getItem('hotelBookings') || '[]');
+    list = list.filter(b=>b.id!==id);
+    localStorage.setItem('hotelBookings', JSON.stringify(list));
+    renderBookings();
+  }
+
+  function searchAvailability(){
+    const ci = document.getElementById('checkin').value;
+    const co = document.getElementById('checkout').value;
+    if(!ci || !co) return alert('Selecciona fechas');
+    const nights = calcNights(ci,co);
+    if(nights <=0) return alert('Fechas inválidas');
+
+    // Mock availability: all rooms available unless already booked overlapping
+    const list = JSON.parse(localStorage.getItem('hotelBookings') || '[]');
+    const overlap = list.some(b=>rangesOverlap(ci,co,b.checkin,b.checkout));
+    const result = document.getElementById('searchResult');
+    if(overlap) result.innerHTML = '<div class="alert alert-warning">En estas fechas hay reservas. Contáctanos para alternativas.</div>';
+    else result.innerHTML = `<div class="alert alert-success">¡Hay disponibilidad! ${nights} noches disponibles. <button class="btn btn-sm btn-primary" onclick="document.getElementById('roomType').value='Habitación Doble'; document.getElementById('bCheckin').value='${ci}'; document.getElementById('bCheckout').value='${co}'; window.scrollTo({top:document.getElementById('reservations').offsetTop, behavior:'smooth'})">Reservar ahora</button></div>`;
+  }
+
+  function rangesOverlap(a1,a2,b1,b2){
+    return !(new Date(a2) <= new Date(b1) || new Date(a1) >= new Date(b2));
+  }
+
+  function clearSearch(){ document.getElementById('checkin').value=''; document.getElementById('checkout').value=''; document.getElementById('searchResult').innerHTML=''; }
+
+  // on load
+  document.addEventListener('DOMContentLoaded', renderBookings);
+</script>
+</body>
+</html>
